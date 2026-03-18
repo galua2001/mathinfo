@@ -29,8 +29,20 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## 📱 PWA (Progressive Web App) 설치 가이드
+이 앱은 스마트폰이나 PC에서 앱처럼 설치하여 사용할 수 있습니다.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **배포된 URL** (HTTPS 연결)로 이동합니다.
+2. **iPhone (Safari)**: 하단의 '공유' 아이콘을 누른 후 '홈 화면에 추가'를 클릭하세요.
+3. **Android (Chrome)**: 주소창 옆의 '설정(점 3개)' 아이콘을 누른 후 '홈 화면에 추가' 또는 '앱 설치'를 클릭하세요.
+4. **PC (Chrome/Edge)**: 주소창 우측의 '앱 설치' 아이콘을 클릭하세요.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🚀 Vercel로 배포하기
+가장 추천하는 배포 방식입니다.
+
+1. **GitHub에 소스 코드 업로드**: 이 프로젝트를 본인의 GitHub 저장소에 push합니다.
+2. **Vercel 연동**: [Vercel](https://vercel.com/new)에서 'Import' 클릭 후 해당 저장소를 선택합니다.
+3. **환경 변수 설정**: 만약 외부 API 키가 있다면 설정 메뉴에서 추가해 주세요.
+4. **배포 완료**: Vercel이 자동으로 빌드하고 HTTPS URL을 생성해 줍니다. 이후부터는 코드를 push할 때마다 자동으로 업데이트됩니다.

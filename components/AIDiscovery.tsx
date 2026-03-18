@@ -71,12 +71,35 @@ export default function AIDiscovery() {
   const [events, setEvents] = useState<MathEvent[]>([]);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
 
+  const [customTargets, setCustomTargets] = useState<string[]>([]);
+  const [newUrl, setNewUrl] = useState('');
+
   useEffect(() => {
     // 로컬 스토리지에서 확인한 아이디 목록 가져오기
-    const saved = JSON.parse(localStorage.getItem('math_radar_viewed') || '[]');
-    setViewedIds(saved);
+    const savedViewed = JSON.parse(localStorage.getItem('math_radar_viewed') || '[]');
+    setViewedIds(savedViewed);
+
+    // 로컬 스토리지에서 커스텀 타겟 URL 목록 가져오기
+    const savedTargets = JSON.parse(localStorage.getItem('math_radar_targets') || '[]');
+    setCustomTargets(savedTargets);
+
     setEvents(INITIAL_DISCOVERED);
   }, []);
+
+  const addTarget = () => {
+    if (newUrl && !customTargets.includes(newUrl)) {
+      const updatedTargets = [...customTargets, newUrl];
+      setCustomTargets(updatedTargets);
+      localStorage.setItem('math_radar_targets', JSON.stringify(updatedTargets));
+      setNewUrl('');
+    }
+  };
+
+  const removeTarget = (url: string) => {
+    const updatedTargets = customTargets.filter(t => t !== url);
+    setCustomTargets(updatedTargets);
+    localStorage.setItem('math_radar_targets', JSON.stringify(updatedTargets));
+  };
 
   const markAsRead = (id: string) => {
     if (!viewedIds.includes(id)) {
@@ -154,11 +177,79 @@ export default function AIDiscovery() {
         })}
       </div>
 
-      <div style={{ marginTop: '30px', padding: '15px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', fontSize: '0.75rem', opacity: 0.6 }}>
+      <div style={{ marginTop: '30px', padding: '20px', borderRadius: '16px', background: 'rgba(6, 182, 212, 0.05)', border: '1px dashed rgba(6, 182, 212, 0.3)' }}>
+        <h4 style={{ fontSize: '0.9rem', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          📡 레이더 타겟 추가
+        </h4>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '15px' }}>
+          <input 
+            type="text" 
+            placeholder="감시할 사이트 URL..." 
+            value={newUrl}
+            onChange={(e) => setNewUrl(e.target.value)}
+            className="glass"
+            style={{ 
+              flex: 1, 
+              padding: '8px 12px', 
+              borderRadius: '8px', 
+              fontSize: '0.8rem', 
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              color: '#fff',
+              outline: 'none'
+            }}
+          />
+          <button 
+            onClick={addTarget}
+            className="btn btn-primary"
+            style={{ padding: '8px 15px', fontSize: '0.8rem', borderRadius: '8px' }}
+          >
+            추가
+          </button>
+        </div>
+
+        {customTargets.length > 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <p style={{ fontSize: '0.7rem', opacity: 0.5, marginBottom: '5px' }}>현재 감시 중인 대상:</p>
+            {customTargets.map((url, i) => (
+              <div key={i} style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center', 
+                padding: '8px 10px', 
+                background: 'rgba(255,255,255,0.03)', 
+                borderRadius: '6px',
+                fontSize: '0.75rem'
+              }}>
+                <span style={{ 
+                  overflow: 'hidden', 
+                  textOverflow: 'ellipsis', 
+                  whiteSpace: 'nowrap', 
+                  maxWidth: '180px',
+                  opacity: 0.8
+                }}>
+                  🔗 {url}
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span className="pulse" style={{ width: '6px', height: '6px', background: '#22c55e', borderRadius: '50%' }}></span>
+                  <button 
+                    onClick={() => removeTarget(url)}
+                    style={{ background: 'none', border: 'none', color: '#ff4b2b', cursor: 'pointer', fontSize: '0.8rem', opacity: 0.6 }}
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div style={{ marginTop: '20px', padding: '15px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', fontSize: '0.75rem', opacity: 0.6 }}>
         <p>🎯 <strong>포착 기준:</strong></p>
         <ul style={{ paddingLeft: '15px', marginTop: '5px' }}>
           <li>공신력 있는 수학교육 기관 공지</li>
-          <li>2026년 상반기 주요 경시/공모/연수</li>
+          <li>사용자가 추가한 커스텀 감시 대상 URL</li>
           <li>실시간 웹 검색 엔진 기반 최신 소식</li>
         </ul>
       </div>
